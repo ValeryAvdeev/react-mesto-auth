@@ -8,6 +8,7 @@ import { CurrentUserContext } from '../contexts/CurrentUserContext'
 import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
 import AddPlacePopup from "./AddPlacePopup";
+import {Route} from "react-router-dom";
 
 function App() {
 
@@ -132,6 +133,15 @@ function App() {
         />
       </CurrentUserContext.Provider>
 
+      {/*для регистрации пользователя*/}
+      <Route path='/sign-up'>
+
+      </Route>
+
+      <Route path='/sing-in'>
+
+      </Route>
+
       <ImagePopup
         card={selectedCard}
         onClose={closeAllPopups}
@@ -147,3 +157,5 @@ function App() {
 }
 
 export default App;
+
+// https://auth.nomoreparties.co

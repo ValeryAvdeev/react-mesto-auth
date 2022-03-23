@@ -9,7 +9,6 @@ function Header() {
         alt="логотип проекта Место России."
         className="header__logo"
       />
-      <Link></Link>
     </header>
   )
 };
