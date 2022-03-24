@@ -153,3 +153,27 @@ Error
 */
 
 @import url(blocks/error/error.css);
+
+/*
+===========
+InfoTooltip
+===========
+*/
+
+@import url(./blocks/infotooltip/infotooltip.css);
+
+/*
+===========
+Login
+===========
+*/
+
+@import url(./blocks/login/login.css);
+
+/*
+===========
+Register
+===========
+*/
+
+@import url(./blocks/register/register.css);
