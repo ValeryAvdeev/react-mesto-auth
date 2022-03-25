@@ -1,4 +1,3 @@
-import InfoTooltip from "./InfoTooltip";
 import React, {useState} from "react";
 
 function Login() {
@@ -13,39 +12,40 @@ function Login() {
   }
 
   return(
-    <>
-      <InfoTooltip
-        name='login'
-        title='Вход'
-        submit='Войти'
+    <div className='login'>
+      <h2 className='login__title'>Вход</h2>
+      <form
+        className='login__form'
         onSubmit={handleSubmit}
       >
         <input
           type="email"
-          name="email"
-          // minLength="2"
-          // maxLength="30"
-          placeholder="Email"
-          className="form-sing__input form__input_email"
-          id="register-email"
+          name="title"
+          minLength="2"
+          maxLength="30"
+          placeholder="Почта"
+          className="login__input"
+          id="username"
           required
           onChange={handleEmail}
           value={email}
         />
-        {/*<span className="error" id="place-name-error"></span>*/}
+        <span className="error" id="place-name-error"></span>
         <input
           type="password"
           name="password"
-          placeholder="Пароль"
-          className="form-sing__input form__input_password"
-          id="sing-password"
+          placeholder="Электронная почта"
+          className="login__input"
+          id="password"
           required
           onChange={handlePassword}
           value={password}
         />
-        {/*<span className="error" id="place-image-error"></span>*/}
-      </InfoTooltip>
-    </>
+        <button type="submit" className="login__link">
+          Войти
+        </button>
+      </form>
+    </div>
   )
 }
 

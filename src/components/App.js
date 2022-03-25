@@ -8,9 +8,10 @@ import { CurrentUserContext } from '../contexts/CurrentUserContext'
 import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
 import AddPlacePopup from "./AddPlacePopup";
-import {Redirect, Route, Switch} from "react-router-dom";
+import {BrowserRouter, Route, Routes} from "react-router-dom";
 import Register from "./Register";
 import Login from "./Login";
+import ProtectedRoute from "./ProtectedRoute";
 
 function App() {
 
@@ -103,51 +104,72 @@ function App() {
 
   return (
     <>
-      <Switch>
-        <CurrentUserContext.Provider value={currentUser}>
-          <Route exact path='/'>
-            <div className="page">
-            <Header />
-              <Main
-                onEditProfile={handleEditProfile}
-                onAddPlace={handleAddPlaceClick}
-                onEditAvatar={handleEditAvatarClick}
-                onCardClick={handleCardClick}
-                cards={cards}
-                onCardLike={handleCardLike}
-                onCardDelete={handleCardDelete}
-              />
-            <Footer />
-          </div>
-          </Route>
-          <Route path='/sing-up'>
-            <Register />
-          </Route>
-          <Route path='/sing-in'>
-            <Login />
-          </Route>
-          <Route exact path='/'>
-            {setLoggedIn ? <Redirect to="/" /> : <Redirect to='/sing-in' />}
-          </Route>
+      <CurrentUserContext.Provider value={currentUser}>
+        <div className="page">
+          <Header />
+        <BrowserRouter>
+          <Routes>
+            <Route path='/sing-in' element={<Login/>} />
+            <Route path='/sing-up' element={<Register/>} />
+            <Route path='/' element={
+              <ProtectedRoute>
+                <Main
+                  onEditProfile={handleEditProfile}
+                  onAddPlace={handleAddPlaceClick}
+                  onEditAvatar={handleEditAvatarClick}
+                  onCardClick={handleCardClick}
+                  cards={cards}
+                  onCardLike={handleCardLike}
+                  onCardDelete={handleCardDelete}
+                />
+              </ProtectedRoute>} />
+          </Routes>
+        </BrowserRouter>
+        </div>
+           {/*<Route exact path='/'>*/}
+           {/*  <div className="page">*/}
+           {/*  <Header />*/}
+           {/*    <ProtectedRoute>*/}
+           {/*      <Main*/}
+           {/*        onEditProfile={handleEditProfile}*/}
+           {/*        onAddPlace={handleAddPlaceClick}*/}
+           {/*        onEditAvatar={handleEditAvatarClick}*/}
+           {/*        onCardClick={handleCardClick}*/}
+           {/*        cards={cards}*/}
+           {/*        onCardLike={handleCardLike}*/}
+           {/*        onCardDelete={handleCardDelete}*/}
+           {/*      />*/}
+           {/*    </ProtectedRoute>*/}
+           {/*  <Footer />*/}
+           {/*</div>*/}
+           {/*</Route>*/}
+           {/*<Route path='/sing-up'>*/}
+           {/*  <Register />*/}
+           {/*</Route>*/}
+           {/*<Route path='/sing-in'>*/}
+           {/*  <Login />*/}
+           {/*</Route>*/}
+           {/*<Route exact path='/'>*/}
+           {/*  {setLoggedIn ? <Redirect to="/" /> : <Redirect to='/sing-in' />}*/}
+           {/*</Route>*/}
           <EditProfilePopup
             isOpen={isEditProfilePopupOpen}
             isClose={closeAllPopups}
             onUpdateUser={handleUpdateUser}
           />
-  
+
           <EditAvatarPopup
             isOpen={isEditAvatarPopupOpen}
             isClose={closeAllPopups}
             onUpdateAvatar={handleUpdateAvatar}
           />
-  
+
           <AddPlacePopup
             isOpen={isAddPlacePopupOpen}
             isClose={closeAllPopups}
             onAddPlace={handleAddPlaceSubmit}
           />
         </CurrentUserContext.Provider>
-      </Switch>
       {/*для регистрации пользователя*/}
       {/*<Route path='/sign-up'>*/}
       {/**/}

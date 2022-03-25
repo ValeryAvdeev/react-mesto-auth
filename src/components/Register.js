@@ -25,7 +25,7 @@ function Register() {
           minLength="2"
           maxLength="30"
           placeholder="Почта"
-          // className="register__form__input form__input_name"
+          className="register__form__input"
           id="username"
           required
           onChange={handleEmail}
@@ -36,13 +36,13 @@ function Register() {
           type="password"
           name="password"
           placeholder="Электронная почта"
-          // className="form__input form__input_popup_image"
+          className="register__form__input"
           id="password"
           required
           onChange={handlePassword}
           value={password}
         />
-        <button type="submit" className="form-sing__submit">
+        <button type="submit" className="register__link">
           Зарегистрироваться
         </button>
       </form>
