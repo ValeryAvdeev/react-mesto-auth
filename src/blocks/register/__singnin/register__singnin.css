@@ -1,0 +1,5 @@
+.register__singnin {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+}

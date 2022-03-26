@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import {Link} from "react-router-dom";
 
+
 function Register() {
 
   const [email, setEmail] = useState('');
@@ -25,7 +26,7 @@ function Register() {
           minLength="2"
           maxLength="30"
           placeholder="Почта"
-          className="register__form__input"
+          className="register__input"
           id="username"
           required
           onChange={handleEmail}
@@ -36,7 +37,7 @@ function Register() {
           type="password"
           name="password"
           placeholder="Электронная почта"
-          className="register__form__input"
+          className="register__input"
           id="password"
           required
           onChange={handlePassword}
@@ -47,8 +48,7 @@ function Register() {
         </button>
       </form>
         <div className='register__singnin'>
-          <p>Уже зарегистрированы?</p>
-          <Link to='login' className='register__login-link'>Войти</Link>
+          <p className='register__subtitle'>Уже зарегистрированы? <Link to='/sing-in' className='register__login-link'>Войти</Link></p>
         </div>
       </div>
     // <div className='register'>
