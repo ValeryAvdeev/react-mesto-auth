@@ -32,7 +32,7 @@ function Register() {
           onChange={handleEmail}
           value={email}
         />
-        <span className="error" id="place-name-error"></span>
+        {/*<span className="error" id="place-name-error"></span>*/}
         <input
           type="password"
           name="password"
@@ -48,7 +48,12 @@ function Register() {
         </button>
       </form>
         <div className='register__singnin'>
-          <p className='register__subtitle'>Уже зарегистрированы? <Link to='/sing-in' className='register__login-link'>Войти</Link></p>
+          <p className='register__subtitle'>
+            Уже зарегистрированы? <Link
+              to='/sing-in'
+              className='register__login-link'
+            >Войти</Link>
+          </p>
         </div>
       </div>
     // <div className='register'>

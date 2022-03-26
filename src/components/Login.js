@@ -30,7 +30,7 @@ function Login() {
           onChange={handleEmail}
           value={email}
         />
-        <span className="error" id="place-name-error"></span>
+        {/*<span className="error" id="place-name-error"></span>*/}
         <input
           type="password"
           name="password"

@@ -106,8 +106,10 @@ function App() {
     <>
       <CurrentUserContext.Provider value={currentUser}>
         <div className="page">
-          <Header />
-        <BrowserRouter>
+
+          <BrowserRouter>
+            <Header />
+
           <Routes>
             <Route path='/sing-in' element={<Login/>} />
             <Route path='/sing-up' element={<Register/>} />
@@ -125,6 +127,7 @@ function App() {
               </ProtectedRoute>} />
           </Routes>
         </BrowserRouter>
+          <Footer />
         </div>
            {/*<Route exact path='/'>*/}
            {/*  <div className="page">*/}
