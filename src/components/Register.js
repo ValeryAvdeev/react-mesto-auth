@@ -47,15 +47,15 @@ function Register() {
           Зарегистрироваться
         </button>
       </form>
-        <div className='register__singnin'>
-          <p className='register__subtitle'>
-            Уже зарегистрированы? <Link
-              to='/sing-in'
-              className='register__login-link'
-            >Войти</Link>
-          </p>
-        </div>
+      <div className='register__singnin'>
+        <p className='register__subtitle'>
+          Уже зарегистрированы? <Link
+          to='/sing-in'
+          className='register__login-link'
+        >Войти</Link>
+        </p>
       </div>
+    </div>
     // <div className='register'>
     //   <form className='form-sing' name='register'>
     //     <h2 className='register__title'>Регистрация</h2>

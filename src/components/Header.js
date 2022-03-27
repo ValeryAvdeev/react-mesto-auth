@@ -1,8 +1,8 @@
 import React from "react";
 import mainLogo from "../images/header-logo.svg";
-import {Route, Link, Routes} from "react-router-dom";
+import {Link} from "react-router-dom";
 
-function Header() {
+function Header(props) {
   return (
     <header className="header">
       <img
@@ -10,32 +10,15 @@ function Header() {
         alt="логотип проекта Место России."
         className="header__logo"
       />
-      <Routes>
-        <Route path="sing-up" element={
+        <div>
+          <p className='header__user'>{props.email}</p>
           <Link
-            to="/sing-in"
+            to={props.route}
             className='header__link'
           >
-            Войти
+            {props.title}
           </Link>
-        }
-        />
-
-        <Route path="sing-in" element={
-          <Link to="/sing-up" className='header__link'>
-            Зарегистрироваться
-          </Link>
-        }
-        />
-      </Routes>
-
-
-      {/*<Route path="/sign-in">*/}
-      {/*  <Link to="/sign-up">Зарегистрироваться</Link>*/}
-      {/*</Route>*/}
-      {/*<Route path="/">*/}
-      {/*  <Link to="/sign-in">Выйти</Link>*/}
-      {/* </Route>*/}
+        </div>
     </header>
   )
 };

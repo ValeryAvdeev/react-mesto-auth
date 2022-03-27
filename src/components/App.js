@@ -4,7 +4,7 @@ import Footer from "./Footer";
 import ImagePopup from "./ImagePopup";
 import {useState, useEffect} from "react";
 import Api from "../utils/Api";
-import { CurrentUserContext } from '../contexts/CurrentUserContext'
+import {CurrentUserContext} from '../contexts/CurrentUserContext'
 import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
 import AddPlacePopup from "./AddPlacePopup";
@@ -17,14 +17,15 @@ function App() {
 
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
-  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] =useState(false);
+  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
+
+  const [currentUser, setCurrentUser] = useState(null);
+
+  const [cards, setCards] = useState([]);
+  const [selectedCard, setSelectedCard] = useState(null);
 
   const [loggedIn, setLoggedIn] = useState(false);
-
-  const [ currentUser, setCurrentUser ] = useState(null);
-  const [ cards, setCards ] = useState([]);
-
-  const [selectedCard, setSelectedCard] = useState(null);
+  const [emailUser, setEmailUser] = useState(null)
 
   const handleCardClick = (cards) => setSelectedCard(cards);
 
@@ -108,71 +109,83 @@ function App() {
         <div className="page">
 
           <BrowserRouter>
-            <Header />
-
-          <Routes>
-            <Route path='/sing-in' element={<Login/>} />
-            <Route path='/sing-up' element={<Register/>} />
-            <Route path='/' element={
-              <ProtectedRoute>
-                <Main
-                  onEditProfile={handleEditProfile}
-                  onAddPlace={handleAddPlaceClick}
-                  onEditAvatar={handleEditAvatarClick}
-                  onCardClick={handleCardClick}
-                  cards={cards}
-                  onCardLike={handleCardLike}
-                  onCardDelete={handleCardDelete}
-                />
-              </ProtectedRoute>} />
-          </Routes>
-        </BrowserRouter>
-          <Footer />
+            <Routes>
+              <Route path='/sing-in' element={
+                <>
+                  <Header title='Регистрация' route='/sing-up'/>
+                  <Login/>
+                </>
+              }/>
+              <Route path='/sing-up' element={
+                <>
+                  <Header title='Вход' route='/sing-in'/>
+                  <Register/>
+                </>
+              }/>
+              <Route path='/' element={
+                <>
+                  <Header title='Выход' route='/sing-in' email={emailUser}/>
+                  <ProtectedRoute>
+                    <Main
+                      onEditProfile={handleEditProfile}
+                      onAddPlace={handleAddPlaceClick}
+                      onEditAvatar={handleEditAvatarClick}
+                      onCardClick={handleCardClick}
+                      cards={cards}
+                      onCardLike={handleCardLike}
+                      onCardDelete={handleCardDelete}
+                    />
+                  </ProtectedRoute>
+                </>
+              }/>
+            </Routes>
+          </BrowserRouter>
+          <Footer/>
         </div>
-           {/*<Route exact path='/'>*/}
-           {/*  <div className="page">*/}
-           {/*  <Header />*/}
-           {/*    <ProtectedRoute>*/}
-           {/*      <Main*/}
-           {/*        onEditProfile={handleEditProfile}*/}
-           {/*        onAddPlace={handleAddPlaceClick}*/}
-           {/*        onEditAvatar={handleEditAvatarClick}*/}
-           {/*        onCardClick={handleCardClick}*/}
-           {/*        cards={cards}*/}
-           {/*        onCardLike={handleCardLike}*/}
-           {/*        onCardDelete={handleCardDelete}*/}
-           {/*      />*/}
-           {/*    </ProtectedRoute>*/}
-           {/*  <Footer />*/}
-           {/*</div>*/}
-           {/*</Route>*/}
-           {/*<Route path='/sing-up'>*/}
-           {/*  <Register />*/}
-           {/*</Route>*/}
-           {/*<Route path='/sing-in'>*/}
-           {/*  <Login />*/}
-           {/*</Route>*/}
-           {/*<Route exact path='/'>*/}
-           {/*  {setLoggedIn ? <Redirect to="/" /> : <Redirect to='/sing-in' />}*/}
-           {/*</Route>*/}
-          <EditProfilePopup
-            isOpen={isEditProfilePopupOpen}
-            isClose={closeAllPopups}
-            onUpdateUser={handleUpdateUser}
-          />
+        {/*<Route exact path='/'>*/}
+        {/*  <div className="page">*/}
+        {/*  <Header />*/}
+        {/*    <ProtectedRoute>*/}
+        {/*      <Main*/}
+        {/*        onEditProfile={handleEditProfile}*/}
+        {/*        onAddPlace={handleAddPlaceClick}*/}
+        {/*        onEditAvatar={handleEditAvatarClick}*/}
+        {/*        onCardClick={handleCardClick}*/}
+        {/*        cards={cards}*/}
+        {/*        onCardLike={handleCardLike}*/}
+        {/*        onCardDelete={handleCardDelete}*/}
+        {/*      />*/}
+        {/*    </ProtectedRoute>*/}
+        {/*  <Footer />*/}
+        {/*</div>*/}
+        {/*</Route>*/}
+        {/*<Route path='/sing-up'>*/}
+        {/*  <Register />*/}
+        {/*</Route>*/}
+        {/*<Route path='/sing-in'>*/}
+        {/*  <Login />*/}
+        {/*</Route>*/}
+        {/*<Route exact path='/'>*/}
+        {/*  {setLoggedIn ? <Redirect to="/" /> : <Redirect to='/sing-in' />}*/}
+        {/*</Route>*/}
+        <EditProfilePopup
+          isOpen={isEditProfilePopupOpen}
+          isClose={closeAllPopups}
+          onUpdateUser={handleUpdateUser}
+        />
 
-          <EditAvatarPopup
-            isOpen={isEditAvatarPopupOpen}
-            isClose={closeAllPopups}
-            onUpdateAvatar={handleUpdateAvatar}
-          />
+        <EditAvatarPopup
+          isOpen={isEditAvatarPopupOpen}
+          isClose={closeAllPopups}
+          onUpdateAvatar={handleUpdateAvatar}
+        />
 
-          <AddPlacePopup
-            isOpen={isAddPlacePopupOpen}
-            isClose={closeAllPopups}
-            onAddPlace={handleAddPlaceSubmit}
-          />
-        </CurrentUserContext.Provider>
+        <AddPlacePopup
+          isOpen={isAddPlacePopupOpen}
+          isClose={closeAllPopups}
+          onAddPlace={handleAddPlaceSubmit}
+        />
+      </CurrentUserContext.Provider>
       {/*для регистрации пользователя*/}
       {/*<Route path='/sign-up'>*/}
       {/**/}
