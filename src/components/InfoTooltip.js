@@ -2,13 +2,18 @@ import React from "react";
 
 function InfoTooltip(props) {
   return(
-    <div className='register'>
-      <form className={`form-sing form-sing_${props.name}`} name='sing'>
-        <h2 className='register__title'>{props.title}</h2>
-        <button type="submit" className="form-sing__submit">
-          {props.submit}
-        </button>
-      </form>
+    <div className={props.isOpen ?
+      `popup popup_open`
+      : `popup`}>
+      <button
+        type="button"
+        aria-label="Кнопка закрытия редактора формы"
+        className="popup__close"
+        onClick={props.onClose}
+      />
+      <img className='popup__image-status' src={props.image} />
+        <h2 className='register__title'>{props.text}</h2>
+
     </div>
   )
 }

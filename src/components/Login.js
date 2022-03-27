@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 
-function Login() {
+function Login(props) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -9,6 +9,7 @@ function Login() {
 
   const handleSubmit = (e) =>{
     e.preventDefault();
+    props.onLogin(email, password);
   }
 
   return(
@@ -30,7 +31,6 @@ function Login() {
           onChange={handleEmail}
           value={email}
         />
-        {/*<span className="error" id="place-name-error"></span>*/}
         <input
           type="password"
           name="password"

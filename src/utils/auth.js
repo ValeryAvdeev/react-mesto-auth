@@ -24,7 +24,7 @@ export const register = (email, password) => {
     .then(checkResponse)
 }
 
-export const loginUser = (email, password) => {
+export const login = (email, password) => {
   return fetch(`${BASE_URL}/signin`, {
     method: 'POST',
     headers: {

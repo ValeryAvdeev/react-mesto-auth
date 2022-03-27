@@ -4,36 +4,43 @@ import Footer from "./Footer";
 import ImagePopup from "./ImagePopup";
 import {useState, useEffect} from "react";
 import Api from "../utils/Api";
+import * as auth from '../utils/auth';
 import {CurrentUserContext} from '../contexts/CurrentUserContext'
 import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
 import AddPlacePopup from "./AddPlacePopup";
-import {BrowserRouter, Route, Routes} from "react-router-dom";
+// import {BrowserRouter, Route, Routes, useNavigate} from "react-router-dom";
+import {Route, Routes, useNavigate} from "react-router-dom";
 import Register from "./Register";
 import Login from "./Login";
 import ProtectedRoute from "./ProtectedRoute";
+import InfoTooltip from "./InfoTooltip";
+import resolve from "../images/header-logo.svg";
+import reject from "../images/header-logo.svg";
+
 
 function App() {
-
+  const nav = useNavigate();
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
 
   const [currentUser, setCurrentUser] = useState(null);
-
   const [cards, setCards] = useState([]);
   const [selectedCard, setSelectedCard] = useState(null);
 
   const [loggedIn, setLoggedIn] = useState(false);
-  const [emailUser, setEmailUser] = useState(null)
+  const [emailUser, setEmailUser] = useState(null);
+  const [popupImage, setPopupImage] = useState('');
+  const [popupText, setPopupText] = useState('');
+  const [isInfoToolTip, setIsInfoToolTip] = useState(false)
 
   const handleCardClick = (cards) => setSelectedCard(cards);
-
   const handleEditAvatarClick = () => setIsEditAvatarPopupOpen(true);
-
   const handleEditProfile = () => setIsEditProfilePopupOpen(true);
-
   const handleAddPlaceClick = () => setIsAddPlacePopupOpen(true);
+  const handleIsInfoToolTip = () => setIsInfoToolTip(true);
+
 
   useEffect(() => {
     Api.getUser()
@@ -53,6 +60,7 @@ function App() {
     setIsAddPlacePopupOpen(false);
     setIsEditAvatarPopupOpen(false);
     setSelectedCard(false);
+    setIsInfoToolTip(false)
   }
 
   const handleCardLike = (card) => {
@@ -103,97 +111,118 @@ function App() {
     setIsAddPlacePopupOpen(false);
   }
 
+  const onRegister = (email, password) => {
+    auth.register(email, password)
+      .then(() => {
+        setPopupImage(resolve);
+        setPopupText('Вы успешно зарегистрировались!');
+        nav('/sing-in');
+      })
+      .catch(() => {
+        setPopupImage(reject);
+        setPopupText('Что-то пошло не так!\n' +
+          'Попробуйте ещё раз.');
+      })
+      .finally(handleIsInfoToolTip)
+  }
+
+  const onLogin = (email, password) => {
+    auth.login(email, password)
+      .then((res) => {
+        localStorage.setItem('jwt', res.token);
+        setLoggedIn(true);
+        setEmailUser(email);
+        nav('/');
+      })
+      .catch(() => {
+        setPopupImage(reject);
+        setPopupText('Что-то пошло не так!\n' +
+          'Попробуйте ещё раз.');
+        handleIsInfoToolTip();
+      })
+  }
+
+  useEffect(() => {
+    const jwt = localStorage.getItem('jwt');
+    if (jwt) {
+      auth.getToken(jwt).then((res) => {
+        if (res) {
+          setLoggedIn(true);
+          setEmailUser(res.data.email);
+        }
+      })
+        .catch((err) => console.log(err))
+    }
+  }, [])
+
+  useEffect(() => {
+    if (loggedIn) nav('/');
+  }, [loggedIn, nav])
+
   return (
-    <>
-      <CurrentUserContext.Provider value={currentUser}>
-        <div className="page">
+    <CurrentUserContext.Provider value={currentUser}>
+      <div className="page">
 
-          <BrowserRouter>
-            <Routes>
-              <Route path='/sing-in' element={
-                <>
-                  <Header title='Регистрация' route='/sing-up'/>
-                  <Login/>
-                </>
-              }/>
-              <Route path='/sing-up' element={
-                <>
-                  <Header title='Вход' route='/sing-in'/>
-                  <Register/>
-                </>
-              }/>
-              <Route path='/' element={
-                <>
-                  <Header title='Выход' route='/sing-in' email={emailUser}/>
-                  <ProtectedRoute>
-                    <Main
-                      onEditProfile={handleEditProfile}
-                      onAddPlace={handleAddPlaceClick}
-                      onEditAvatar={handleEditAvatarClick}
-                      onCardClick={handleCardClick}
-                      cards={cards}
-                      onCardLike={handleCardLike}
-                      onCardDelete={handleCardDelete}
-                    />
-                  </ProtectedRoute>
-                </>
-              }/>
-            </Routes>
-          </BrowserRouter>
-          <Footer/>
-        </div>
-        {/*<Route exact path='/'>*/}
-        {/*  <div className="page">*/}
-        {/*  <Header />*/}
-        {/*    <ProtectedRoute>*/}
-        {/*      <Main*/}
-        {/*        onEditProfile={handleEditProfile}*/}
-        {/*        onAddPlace={handleAddPlaceClick}*/}
-        {/*        onEditAvatar={handleEditAvatarClick}*/}
-        {/*        onCardClick={handleCardClick}*/}
-        {/*        cards={cards}*/}
-        {/*        onCardLike={handleCardLike}*/}
-        {/*        onCardDelete={handleCardDelete}*/}
-        {/*      />*/}
-        {/*    </ProtectedRoute>*/}
-        {/*  <Footer />*/}
-        {/*</div>*/}
-        {/*</Route>*/}
-        {/*<Route path='/sing-up'>*/}
-        {/*  <Register />*/}
-        {/*</Route>*/}
-        {/*<Route path='/sing-in'>*/}
-        {/*  <Login />*/}
-        {/*</Route>*/}
-        {/*<Route exact path='/'>*/}
-        {/*  {setLoggedIn ? <Redirect to="/" /> : <Redirect to='/sing-in' />}*/}
-        {/*</Route>*/}
-        <EditProfilePopup
-          isOpen={isEditProfilePopupOpen}
-          isClose={closeAllPopups}
-          onUpdateUser={handleUpdateUser}
-        />
+        {/*<BrowserRouter>*/}
+          <Routes>
+            <Route path='/sing-in' element={
+              <>
+                <Header title='Регистрация' route='/sing-up'/>
+                <Login onLogin={onLogin}/>
+              </>
+            }/>
+            <Route path='/sing-up' element={
+              <>
+                <Header title='Вход' route='/sing-in'/>
+                <Register onRegister={onRegister}/>
+              </>
+            }/>
+            <Route path='/' element={
+              <>
+                <Header title='Выход' route='/sing-in' email={emailUser}/>
+                <ProtectedRoute>
+                  <Main
+                    onEditProfile={handleEditProfile}
+                    onAddPlace={handleAddPlaceClick}
+                    onEditAvatar={handleEditAvatarClick}
+                    onCardClick={handleCardClick}
+                    cards={cards}
+                    onCardLike={handleCardLike}
+                    onCardDelete={handleCardDelete}
+                  />
+                </ProtectedRoute>
+              </>
+            }/>
+          </Routes>
+        {/*</BrowserRouter>*/}
+        <Footer/>
+      </div>
 
-        <EditAvatarPopup
-          isOpen={isEditAvatarPopupOpen}
-          isClose={closeAllPopups}
-          onUpdateAvatar={handleUpdateAvatar}
-        />
+      <EditProfilePopup
+        isOpen={isEditProfilePopupOpen}
+        isClose={closeAllPopups}
+        onUpdateUser={handleUpdateUser}
+      />
 
-        <AddPlacePopup
-          isOpen={isAddPlacePopupOpen}
-          isClose={closeAllPopups}
-          onAddPlace={handleAddPlaceSubmit}
-        />
-      </CurrentUserContext.Provider>
-      {/*для регистрации пользователя*/}
-      {/*<Route path='/sign-up'>*/}
-      {/**/}
-      {/*</Route>*/}
-      {/*для авторизации пользователя.*/}
-      {/*<Route path='/sing-in'>*/}
-      {/**/}
-      {/*</Route>*/}
+      <EditAvatarPopup
+        isOpen={isEditAvatarPopupOpen}
+        isClose={closeAllPopups}
+        onUpdateAvatar={handleUpdateAvatar}
+      />
+
+      <AddPlacePopup
+        isOpen={isAddPlacePopupOpen}
+        isClose={closeAllPopups}
+        onAddPlace={handleAddPlaceSubmit}
+      />
+
+      <InfoTooltip
+        image={popupImage}
+        text={popupText}
+        isOpen={handleIsInfoToolTip}
+        isClose={closeAllPopups}
+
+      />
 
       <ImagePopup
         card={selectedCard}
@@ -205,10 +234,8 @@ function App() {
       {/*  title='Вы уверены?'*/}
       {/*  submit='Да'*/}
       {/*/>*/}
-    </>
+    </CurrentUserContext.Provider>
   );
 }
 
 export default App;
-
-// https://auth.nomoreparties.co

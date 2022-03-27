@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import {Link} from "react-router-dom";
 
 
-function Register() {
+function Register(props) {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -12,6 +12,7 @@ function Register() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    props.onRegister(email, password);
   }
   return (
     <div className='register'>
@@ -32,7 +33,6 @@ function Register() {
           onChange={handleEmail}
           value={email}
         />
-        {/*<span className="error" id="place-name-error"></span>*/}
         <input
           type="password"
           name="password"
@@ -56,16 +56,6 @@ function Register() {
         </p>
       </div>
     </div>
-    // <div className='register'>
-    //   <form className='form-sing' name='register'>
-    //     <h2 className='register__title'>Регистрация</h2>
-
-    //     <span className="error" id="place-image-error"></span>
-    //     <button type="submit" className="form__submit">
-    //       {props.submit}
-    //     </button>
-    //   </form>
-    // </div>
   )
 }
 
