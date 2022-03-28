@@ -9,7 +9,7 @@ function PopupWithForm(props) {
       <div
         className="popup__overlay"
         onClick={props.onClose}
-      ></div>
+      />
       <div className="popup__content">
         <button
           type="button"

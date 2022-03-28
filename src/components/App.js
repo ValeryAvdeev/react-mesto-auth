@@ -9,14 +9,13 @@ import {CurrentUserContext} from '../contexts/CurrentUserContext'
 import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
 import AddPlacePopup from "./AddPlacePopup";
-// import {BrowserRouter, Route, Routes, useNavigate} from "react-router-dom";
 import {Route, Routes, useNavigate} from "react-router-dom";
 import Register from "./Register";
 import Login from "./Login";
 import ProtectedRoute from "./ProtectedRoute";
 import InfoTooltip from "./InfoTooltip";
-import resolve from "../images/header-logo.svg";
-import reject from "../images/header-logo.svg";
+import resolve from "../images/resolve.png";
+import reject from "../images/reject.png";
 
 
 function App() {
@@ -60,7 +59,7 @@ function App() {
     setIsAddPlacePopupOpen(false);
     setIsEditAvatarPopupOpen(false);
     setSelectedCard(false);
-    setIsInfoToolTip(false)
+    setIsInfoToolTip(false);
   }
 
   const handleCardLike = (card) => {
@@ -219,7 +218,7 @@ function App() {
       <InfoTooltip
         image={popupImage}
         text={popupText}
-        isOpen={handleIsInfoToolTip}
+        isOpen={isInfoToolTip}
         isClose={closeAllPopups}
 
       />
