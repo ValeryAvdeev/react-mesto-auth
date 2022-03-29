@@ -103,7 +103,7 @@ function App() {
   }
 
   const onRegister = (email, password) => {
-    auth.register(email, password)
+    auth.registerUser(email, password)
       .then(() => {
         setPopupImage(resolve);
         setPopupText('Вы успешно зарегистрировались!');
@@ -118,7 +118,7 @@ function App() {
   }
 
   const onLogin = (email, password) => {
-    auth.login(email, password)
+    auth.loginUser(email, password)
       .then((res) => {
         localStorage.setItem('jwt', res.token);
         setLoggedIn(true);
@@ -147,7 +147,9 @@ function App() {
   }, [])
 
   useEffect(() => {
-    if (loggedIn) nav('/');
+    if (loggedIn) {
+      return nav('/');
+    }
   }, [loggedIn, nav])
 
   const closeAllPopups = () => {

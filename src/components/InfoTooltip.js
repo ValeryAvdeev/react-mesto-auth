@@ -7,16 +7,16 @@ function InfoTooltip(props) {
       : `popup`}>
       <div
         className="popup__overlay"
-        onClick={props.onClose}
+        onClick={props.isClose}
       />
       <div className="popup__content">
         <button
           type="button"
           aria-label="Кнопка закрытия редактора формы"
           className="popup__close"
-          onClick={props.onClose}
+          onClick={props.isClose}
         />
-        <img className='popup__image-status' src={props.image}/>
+        <img className='popup__image-status' src={props.image} alt='картинка'/>
         <h2 className='register__title'>{props.text}</h2>
       </div>
     </div>

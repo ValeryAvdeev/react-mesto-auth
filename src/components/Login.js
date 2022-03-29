@@ -9,6 +9,7 @@ function Login(props) {
 
   const handleSubmit = (e) =>{
     e.preventDefault();
+    console.log(props.onLogin)
     props.onLogin(email, password);
   }
 
