@@ -14,7 +14,7 @@ const checkResponse = (res) => {
 }
 
 export const register = (email, password) => {
-  return fetch(`${BASE_URL}/singup`, {
+  return fetch(`${BASE_URL}/signup`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -42,5 +42,7 @@ export const getToken = (token) => {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
     },
-    }).then(checkResponse);
+    })
+    .then((res) => res.json())
+    .then((data) => data);
 }

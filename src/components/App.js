@@ -54,14 +54,6 @@ function App() {
       .catch(err => console.log(`Ошибка в App.js при запросе информации о пользователе ${err}`))
   }, [])
 
-  const closeAllPopups = () => {
-    setIsEditProfilePopupOpen(false);
-    setIsAddPlacePopupOpen(false);
-    setIsEditAvatarPopupOpen(false);
-    setSelectedCard(false);
-    setIsInfoToolTip(false);
-  }
-
   const handleCardLike = (card) => {
     // Снова проверяем, есть ли уже лайк на этой карточке
     const isLiked = card.likes.some(i => i._id === currentUser._id);
@@ -158,42 +150,47 @@ function App() {
     if (loggedIn) nav('/');
   }, [loggedIn, nav])
 
+  const closeAllPopups = () => {
+    setIsEditProfilePopupOpen(false);
+    setIsAddPlacePopupOpen(false);
+    setIsEditAvatarPopupOpen(false);
+    setSelectedCard(false);
+    setIsInfoToolTip(false);
+  }
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
-
-        {/*<BrowserRouter>*/}
-          <Routes>
-            <Route path='/sing-in' element={
-              <>
-                <Header title='Регистрация' route='/sing-up'/>
-                <Login onLogin={onLogin}/>
-              </>
-            }/>
-            <Route path='/sing-up' element={
-              <>
-                <Header title='Вход' route='/sing-in'/>
-                <Register onRegister={onRegister}/>
-              </>
-            }/>
-            <Route path='/' element={
-              <>
-                <Header title='Выход' route='/sing-in' email={emailUser}/>
-                <ProtectedRoute>
-                  <Main
-                    onEditProfile={handleEditProfile}
-                    onAddPlace={handleAddPlaceClick}
-                    onEditAvatar={handleEditAvatarClick}
-                    onCardClick={handleCardClick}
-                    cards={cards}
-                    onCardLike={handleCardLike}
-                    onCardDelete={handleCardDelete}
-                  />
-                </ProtectedRoute>
-              </>
-            }/>
-          </Routes>
-        {/*</BrowserRouter>*/}
+        <Routes>
+          <Route path='/sing-in' element={
+            <>
+              <Header title='Регистрация' route='/sing-up'/>
+              <Login onLogin={onLogin}/>
+            </>
+          }/>
+          <Route path='/sing-up' element={
+            <>
+              <Header title='Вход' route='/sing-in'/>
+              <Register onRegister={onRegister}/>
+            </>
+          }/>
+          <Route path='/' element={
+            <>
+              <Header title='Выход' route='/sing-in' email={emailUser}/>
+              <ProtectedRoute>
+                <Main
+                  onEditProfile={handleEditProfile}
+                  onAddPlace={handleAddPlaceClick}
+                  onEditAvatar={handleEditAvatarClick}
+                  onCardClick={handleCardClick}
+                  cards={cards}
+                  onCardLike={handleCardLike}
+                  onCardDelete={handleCardDelete}
+                />
+              </ProtectedRoute>
+            </>
+          }/>
+        </Routes>
         <Footer/>
       </div>
 
@@ -220,7 +217,6 @@ function App() {
         text={popupText}
         isOpen={isInfoToolTip}
         isClose={closeAllPopups}
-
       />
 
       <ImagePopup
