@@ -3,8 +3,8 @@ import Main from "./Main";
 import Footer from "./Footer";
 import ImagePopup from "./ImagePopup";
 import {useState, useEffect} from "react";
-import Api from "../utils/Api";
-import * as auth from '../utils/auth';
+import {api, auth} from "../utils/Api";
+// import * as auth from '../utils/auth';
 import {CurrentUserContext} from '../contexts/CurrentUserContext'
 import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
@@ -42,12 +42,12 @@ function App() {
 
 
   useEffect(() => {
-    Api.getUser()
+    api.getUser()
       .then(res => {
         setCurrentUser(res)
       })
       .then(() => {
-        Api.getCards()
+        api.getCards()
           .then(card => setCards(card))
           .catch(err => console.log(`Ошибка в App.js при создании карточек ${err}`))
       })
@@ -58,7 +58,7 @@ function App() {
     // Снова проверяем, есть ли уже лайк на этой карточке
     const isLiked = card.likes.some(i => i._id === currentUser._id);
     // Отправляем запрос в API и получаем обновлённые данные карточки
-    Api.changeLikeCardStatus(card._id, !isLiked)
+    api.changeLikeCardStatus(card._id, !isLiked)
       .then((newCard) => {
         setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
       })
@@ -67,7 +67,7 @@ function App() {
 
   const handleCardDelete = (card) => {
     // Отправляем запрос в API и получаем обновлённые данные карточки
-    Api.deleteCard(card._id)
+    api.deleteCard(card._id)
       .then(() => {
         setCards((state) => {
           return state.filter((i) => i._id !== card._id)
@@ -78,7 +78,7 @@ function App() {
 
   const handleUpdateUser = (currentUser) => {
 
-    Api.editProfile({name: currentUser.name, info: currentUser.about})
+    api.editProfile({name: currentUser.name, info: currentUser.about})
       .then(user => setCurrentUser(user))
       .catch(err => console.log(`Ошибка в App.js при редактировании информации о user ${err}`))
 
@@ -87,7 +87,7 @@ function App() {
 
   const handleUpdateAvatar = (newAvatar) => {
 
-    Api.editAvatar(newAvatar)
+    api.editAvatar(newAvatar)
       .then((avatar) => setCurrentUser(avatar))
       .catch(err => console.log(`Ошибка в App.js при редактировании информации о user ${err}`));
 
@@ -95,7 +95,7 @@ function App() {
   }
 
   const handleAddPlaceSubmit = (obj) => {
-    Api.addCard({name: obj.name, link: obj.link})
+    api.addCard({name: obj.name, link: obj.link})
       .then((newCard) => setCards([newCard, ...cards]))
       .catch(err => console.log(`Ошибка в App.js при добавлении карточки ${err}`))
 
@@ -118,10 +118,16 @@ function App() {
   }
 
   const onLogin = (email, password) => {
+    console.log(email)
+    console.log(password)
+
     auth.loginUser(email, password)
       .then((res) => {
+        console.log(res)
         localStorage.setItem('jwt', res.token);
         setLoggedIn(true);
+        console.log(setEmailUser(email));
+        console.log(email);
         setEmailUser(email);
         nav('/');
       })
@@ -135,14 +141,23 @@ function App() {
 
   useEffect(() => {
     const jwt = localStorage.getItem('jwt');
+    // if (jwt) {
+    //   auth.getToken(jwt).then((res) => {
+    //     if (res) {
+    //       setLoggedIn(true);
+    //       setEmailUser(res.data.email);
+    //     }
+    //   })
+    //     .catch((err) => console.log(err))
+    // }
     if (jwt) {
-      auth.getToken(jwt).then((res) => {
-        if (res) {
-          setLoggedIn(true);
-          setEmailUser(res.data.email);
-        }
-      })
-        .catch((err) => console.log(err))
+      auth.getUser()
+        .then((res) => {
+          setCurrentUser((prev) => {
+            return {...prev, ...res.data, isLoggedIn: true};
+          });
+        })
+        .catch((error) => console.log(error));
     }
   }, [])
 
