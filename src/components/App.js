@@ -44,7 +44,10 @@ function App() {
   useEffect(() => {
     api.getUser()
       .then(res => {
-        setCurrentUser(res)
+        // setCurrentUser(res)
+        setCurrentUser((prev) => {
+          return { ...prev, ...res }
+        });
       })
       .then(() => {
         api.getCards()
@@ -79,7 +82,12 @@ function App() {
   const handleUpdateUser = (currentUser) => {
 
     api.editProfile({name: currentUser.name, info: currentUser.about})
-      .then(user => setCurrentUser(user))
+      .then(user => {
+        // setCurrentUser(avatar)
+        setCurrentUser(prev => {
+          return {...prev, ...user};
+        })
+      })
       .catch(err => console.log(`Ошибка в App.js при редактировании информации о user ${err}`))
 
     setIsEditProfilePopupOpen(false);
@@ -88,7 +96,12 @@ function App() {
   const handleUpdateAvatar = (newAvatar) => {
 
     api.editAvatar(newAvatar)
-      .then((avatar) => setCurrentUser(avatar))
+      .then((avatar) => {
+        // setCurrentUser(avatar)
+        setCurrentUser(prev => {
+          return {...prev, ...avatar}
+        })
+      })
       .catch(err => console.log(`Ошибка в App.js при редактировании информации о user ${err}`));
 
     setIsEditAvatarPopupOpen(false);
@@ -118,17 +131,15 @@ function App() {
   }
 
   const onLogin = (email, password) => {
-    console.log(email)
-    console.log(password)
-
     auth.loginUser(email, password)
       .then((res) => {
-        console.log(res)
         localStorage.setItem('jwt', res.token);
         setLoggedIn(true);
-        console.log(setEmailUser(email));
-        console.log(email);
         setEmailUser(email);
+        // setEmailUser((email) => {
+        //   return {...email, ...res}
+        // });
+
         nav('/');
       })
       .catch(() => {
