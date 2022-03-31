@@ -24,14 +24,14 @@ function Register(props) {
         <input
           type="email"
           name="title"
-          minLength="2"
+          minLength="10"
           maxLength="30"
           placeholder="Почта"
           className="register__input"
           id="username"
           required
           onChange={handleEmail}
-          value={email}
+          value={email || ''}
         />
         <input
           type="password"
@@ -39,9 +39,11 @@ function Register(props) {
           placeholder="Электронная почта"
           className="register__input"
           id="password"
+          minLength="4"
+          maxLength="40"
           required
           onChange={handlePassword}
-          value={password}
+          value={password || ''}
         />
         <button type="submit" className="register__link">
           Зарегистрироваться

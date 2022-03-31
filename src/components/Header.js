@@ -10,7 +10,7 @@ function Header(props) {
         alt="логотип проекта Место России."
         className="header__logo"
       />
-        <div>
+        <div className='header__info'>
           <p className='header__user'>{props.email}</p>
           <Link
             to={props.route}
