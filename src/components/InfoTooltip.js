@@ -17,7 +17,7 @@ function InfoTooltip(props) {
           onClick={props.isClose}
         />
         <img className='popup__image-status' src={props.image} alt='картинка'/>
-        <h2 className='register__title'>{props.text}</h2>
+        <h2 className='popup__status'>{props.text}</h2>
       </div>
     </div>
   )

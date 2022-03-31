@@ -4,10 +4,6 @@ class Api {
   constructor(data) {
     this._baseUrl = data.baseUrl;
     this._headers = data.headers;
-    // this._headers = {
-    //   authorization: this._token,
-    //   'Content-Type': 'application/json'
-    // };
   }
 
   _handleResponse = (response) => {

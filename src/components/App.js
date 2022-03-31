@@ -4,7 +4,6 @@ import Footer from "./Footer";
 import ImagePopup from "./ImagePopup";
 import {useState, useEffect} from "react";
 import {api, auth} from "../utils/Api";
-// import * as auth from '../utils/auth';
 import {CurrentUserContext} from '../contexts/CurrentUserContext'
 import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
@@ -24,12 +23,10 @@ function App() {
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
 
-  const [currentUser, setCurrentUser] = useState(null);
+  const [currentUser, setCurrentUser] = useState({isLoggedIn: false});
   const [cards, setCards] = useState([]);
   const [selectedCard, setSelectedCard] = useState(null);
 
-  const [loggedIn, setLoggedIn] = useState(false);
-  const [emailUser, setEmailUser] = useState(null);
   const [popupImage, setPopupImage] = useState('');
   const [popupText, setPopupText] = useState('');
   const [isInfoToolTip, setIsInfoToolTip] = useState(false)
@@ -46,7 +43,7 @@ function App() {
       .then(res => {
         // setCurrentUser(res)
         setCurrentUser((prev) => {
-          return { ...prev, ...res }
+          return {...prev, ...res}
         });
       })
       .then(() => {
@@ -134,11 +131,9 @@ function App() {
     auth.loginUser(email, password)
       .then((res) => {
         localStorage.setItem('jwt', res.token);
-        setLoggedIn(true);
-        setEmailUser(email);
-        // setEmailUser((email) => {
-        //   return {...email, ...res}
-        // });
+        setCurrentUser((prev) => {
+          return {...prev, loggedIn: true, email};
+        });
 
         nav('/');
       })
@@ -152,31 +147,23 @@ function App() {
 
   useEffect(() => {
     const jwt = localStorage.getItem('jwt');
-    // if (jwt) {
-    //   auth.getToken(jwt).then((res) => {
-    //     if (res) {
-    //       setLoggedIn(true);
-    //       setEmailUser(res.data.email);
-    //     }
-    //   })
-    //     .catch((err) => console.log(err))
-    // }
+
     if (jwt) {
       auth.getUser()
         .then((res) => {
           setCurrentUser((prev) => {
-            return {...prev, ...res.data, isLoggedIn: true};
+            return {...prev, ...res.data, loggedIn: true};
           });
         })
         .catch((error) => console.log(error));
     }
   }, [])
 
-  useEffect(() => {
-    if (loggedIn) {
-      return nav('/');
-    }
-  }, [loggedIn, nav])
+  const onSingOut = () => {
+    setCurrentUser({isLoggedIn: false});
+    nav('/sign-in');
+    localStorage.removeItem('jwt');
+  }
 
   const closeAllPopups = () => {
     setIsEditProfilePopupOpen(false);
@@ -204,7 +191,11 @@ function App() {
           }/>
           <Route path='/' element={
             <>
-              <Header title='Выход' route='/sing-in' email={emailUser}/>
+              <Header
+                title='Выход'
+                route='/sing-in'
+                onClick={onSingOut}
+              />
               <ProtectedRoute>
                 <Main
                   onEditProfile={handleEditProfile}

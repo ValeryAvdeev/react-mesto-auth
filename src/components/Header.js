@@ -1,8 +1,10 @@
-import React from "react";
+import React, {useContext} from "react";
 import mainLogo from "../images/header-logo.svg";
 import {Link} from "react-router-dom";
+import {CurrentUserContext} from "../contexts/CurrentUserContext";
 
 function Header(props) {
+  const currentUser = useContext(CurrentUserContext);
   return (
     <header className="header">
       <img
@@ -11,10 +13,12 @@ function Header(props) {
         className="header__logo"
       />
         <div className='header__info'>
-          <p className='header__user'>{props.email}</p>
+          <p className='header__user'>{currentUser.email}</p>
           <Link
             to={props.route}
             className='header__link'
+            type='button'
+            onClick={props.onClick}
           >
             {props.title}
           </Link>
