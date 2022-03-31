@@ -39,19 +39,21 @@ function App() {
 
 
   useEffect(() => {
-    api.getUser()
-      .then(res => {
-        // setCurrentUser(res)
-        setCurrentUser((prev) => {
-          return {...prev, ...res}
-        });
-      })
-      .then(() => {
-        api.getCards()
-          .then(card => setCards(card))
-          .catch(err => console.log(`Ошибка в App.js при создании карточек ${err}`))
-      })
-      .catch(err => console.log(`Ошибка в App.js при запросе информации о пользователе ${err}`))
+    if(currentUser.isLoggedIn) {
+      api.getUser()
+        .then(res => {
+          // setCurrentUser(res)
+          setCurrentUser((prev) => {
+            return {...prev, ...res}
+          });
+        })
+        .then(() => {
+          api.getCards()
+            .then(card => setCards(card))
+            .catch(err => console.log(`Ошибка в App.js при создании карточек ${err}`))
+        })
+        .catch(err => console.log(`Ошибка в App.js при запросе информации о пользователе ${err}`))
+    }
   }, [])
 
   const handleCardLike = (card) => {
