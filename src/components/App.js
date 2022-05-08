@@ -54,7 +54,7 @@ function App() {
         })
         .catch(err => console.log(`Ошибка в App.js при запросе информации о пользователе ${err}`))
     }
-  }, [])
+  }, [currentUser.isLoggedIn])
 
   const handleCardLike = (card) => {
     // Снова проверяем, есть ли уже лайк на этой карточке
@@ -134,7 +134,7 @@ function App() {
       .then((res) => {
         localStorage.setItem('jwt', res.token);
         setCurrentUser((prev) => {
-          return {...prev, loggedIn: true, email};
+          return {...prev, isLoggedIn: true, email};
         });
 
         nav('/');
@@ -154,7 +154,7 @@ function App() {
       auth.getUser()
         .then((res) => {
           setCurrentUser((prev) => {
-            return {...prev, ...res.data, loggedIn: true};
+            return {...prev, ...res.data, isLoggedIn: true};
           });
         })
         .catch((error) => console.log(error));
