@@ -20,7 +20,8 @@ function Card(props){
 
   // Создаём переменную, которую после зададим в `className` для кнопки лайка
   const cardLikeButtonClassName = (`button ${ isLiked ? 'button_item_like-active' : 'button_item_like'}`);
-
+  //
+  // console.log(props.card._id)
   const handleCardDelete = () => props.onCardDelete(props.card);
 
   return (

@@ -39,7 +39,7 @@ function App() {
 
 
   useEffect(() => {
-    if(currentUser.isLoggedIn) {
+    if (currentUser.isLoggedIn) {
       api.getUser()
         .then(res => {
           // setCurrentUser(res)
